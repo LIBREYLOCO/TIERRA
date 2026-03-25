@@ -208,22 +208,41 @@
     .flujo-bottom{text-align:center;padding:2rem;background:var(--choc-card);border:1px solid var(--choc-border);border-radius:3px}
     .flujo-bottom-t{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--gold-pale);margin-bottom:.4rem}
     .flujo-bottom-s{font-size:.76rem;color:var(--on-dark-mid)}
-    /* ── MASTERPLAN VIEWER ── */
-    #masterplan{padding:6rem 0 0;background:var(--cream)}
-    .mp-header{text-align:center;margin-bottom:2.5rem}
+    /* ── MASTERPLAN GALLERY ── */
+    #masterplan{padding:6rem 0 7rem;background:var(--cream)}
+    .mp-header{text-align:center;margin-bottom:3rem}
     .mp-desc{font-size:.88rem;color:var(--ink-light);margin-top:.6rem}
-    .mp-stage-wrap{position:relative;width:100%;overflow:hidden;background:#1a0a04;border-top:1px solid var(--cream-mid);border-bottom:3px solid var(--gold-dark)}
-    .mp-stage{width:100%;height:72vh;min-height:460px;max-height:700px;overflow:hidden;cursor:grab;user-select:none;-webkit-user-select:none}
-    .mp-stage.dragging{cursor:grabbing}
-    .mp-canvas{width:100%;height:100%;display:flex;align-items:center;justify-content:center;transform-origin:0 0;will-change:transform;transition:transform .05s linear}
-    .mp-canvas.no-transition{transition:none}
-    .mp-img{display:block;max-width:none;height:100%;max-height:100%;object-fit:contain;pointer-events:none;border:none}
-    .mp-controls{position:absolute;bottom:1.2rem;right:1.2rem;display:flex;flex-direction:column;gap:.4rem;z-index:10}
-    .mp-btn{width:36px;height:36px;border-radius:4px;background:rgba(60,18,8,.88);border:1px solid var(--choc-border);color:var(--gold-light);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;backdrop-filter:blur(8px)}
-    .mp-btn:hover{background:rgba(82,26,12,.95);border-color:rgba(197,160,89,.4);color:var(--gold-bright)}
-    .mp-btn:active{transform:scale(.92)}
-    .mp-hint{position:absolute;bottom:1.2rem;left:1.2rem;display:flex;align-items:center;gap:.5rem;font-size:.7rem;color:rgba(245,237,216,.45);pointer-events:none;transition:opacity .5s}
-    .mp-hint.hidden{opacity:0}
+    .mp-gallery{display:flex;justify-content:center;align-items:flex-start;gap:0}
+    .mp-image-wrap{position:relative;width:min(420px,55vw);flex-shrink:0}
+    .mp-main-img{width:100%;height:auto;display:block;border-radius:4px;box-shadow:0 24px 64px rgba(60,18,8,.24)}
+    .mp-hotspot{position:absolute;width:38px;height:38px;transform:translate(-50%,-50%);background:none;border:none;cursor:pointer;padding:0;z-index:5}
+    .mp-hotspot-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(197,160,89,.75);animation:hs-pulse 2.4s ease-out infinite}
+    .mp-hotspot-dot{position:absolute;inset:10px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 0 2px rgba(60,18,8,.55),0 2px 10px rgba(0,0,0,.4);transition:transform .2s,background .2s}
+    .mp-hotspot:hover .mp-hotspot-dot,.mp-hotspot.active .mp-hotspot-dot{background:var(--gold-bright);transform:scale(1.3)}
+    .mp-hotspot.active .mp-hotspot-ring{border-color:var(--gold-bright);animation:none;transform:scale(1.5);opacity:.6}
+    .mp-hotspot-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.52rem;font-weight:700;color:var(--ink);z-index:2;pointer-events:none}
+    @keyframes hs-pulse{0%{transform:scale(1);opacity:.85}70%{transform:scale(2.1);opacity:0}100%{transform:scale(2.1);opacity:0}}
+    .mp-panel-outer{max-width:0;overflow:hidden;flex-shrink:0;transition:max-width .45s cubic-bezier(.22,.68,0,1.2),margin-left .45s cubic-bezier(.22,.68,0,1.2)}
+    .mp-panel-outer.active{max-width:340px;margin-left:1.8rem}
+    .mp-panel{width:300px;background:var(--choc);border-radius:4px;overflow:hidden;position:relative;opacity:0;transform:translateX(-12px);transition:opacity .4s .1s,transform .4s .1s cubic-bezier(.22,.68,0,1.2)}
+    .mp-panel-outer.active .mp-panel{opacity:1;transform:translateX(0)}
+    .mp-panel-crop{height:210px;background-image:url('WhatsApp%20Image%202026-03-18%20at%2014.47.41.jpeg');background-repeat:no-repeat;background-size:300%;transition:background-position .55s ease}
+    .mp-panel-body{padding:1.3rem 1.4rem 1.5rem}
+    .mp-panel-zone{font-size:.56rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem}
+    .mp-panel-title{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--gold-pale);margin-bottom:.55rem;font-weight:600}
+    .mp-panel-desc{font-size:.78rem;color:var(--on-dark-mid);line-height:1.75}
+    .mp-panel-close{position:absolute;top:.65rem;right:.65rem;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.09);border:none;color:var(--on-dark-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:10}
+    .mp-panel-close:hover{background:rgba(255,255,255,.18);color:var(--on-dark)}
+    .mp-tap-hint{text-align:center;margin-top:1.2rem;font-size:.7rem;color:var(--ink-light);display:flex;align-items:center;justify-content:center;gap:.5rem;transition:opacity .6s}
+    .mp-tap-hint.gone{opacity:0;pointer-events:none}
+    .mp-panel-sheet{display:none}
+    @media(max-width:680px){
+      .mp-image-wrap{width:100%}
+      .mp-panel-outer{display:none}
+      .mp-panel-sheet{display:block;position:fixed;bottom:0;left:0;right:0;z-index:200;transform:translateY(110%);transition:transform .4s cubic-bezier(.22,.68,0,1.2)}
+      .mp-panel-sheet.active{transform:translateY(0)}
+      .mp-panel-sheet .mp-panel{width:100%;border-radius:14px 14px 0 0;opacity:1;transform:none}
+    }
     /* ── POOL DE RENTAS GRID ── */
     .pool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2.5rem}
     .pool-item{background:rgba(255,255,255,.04);border:1px solid var(--choc-border);border-radius:3px;padding:1.5rem 1.3rem;transition:all .3s;opacity:0;transform:translateY(14px)}
@@ -1050,41 +1069,104 @@
 
 </section>
 
-<!-- ═══════════════ MASTERPLAN VIEWER ═══════════════ -->
+<!-- ═══════════════ MASTERPLAN GALLERY ═══════════════ -->
 <section id="masterplan">
   <div class="container">
     <div class="mp-header">
       <span class="section-label">Primera Etapa · Vista Aérea</span>
       <h2 class="section-title">El proyecto desde arriba</h2>
-      <div class="divider-gold"></div>
-      <p class="mp-desc">Render oficial de la primera etapa. Arrastra para navegar · Scroll o pellizca para hacer zoom.</p>
+      <div class="divider-gold center"></div>
+      <p class="mp-desc">Toca un punto para explorar cada zona del desarrollo.</p>
     </div>
-  </div>
 
-  <div class="mp-stage-wrap">
-    <div class="mp-stage" id="mpStage">
-      <div class="mp-canvas" id="mpCanvas">
-        <img src="WhatsApp%20Image%202026-03-18%20at%2014.47.41.jpeg" alt="El Salitre Pueblo Mágico — Primera Etapa" class="mp-img" id="mpImg" draggable="false">
+    <div class="mp-gallery">
+      <!-- Imagen central con hotspots -->
+      <div class="mp-image-wrap">
+        <img src="WhatsApp%20Image%202026-03-18%20at%2014.47.41.jpeg" alt="El Salitre Pueblo Mágico" class="mp-main-img" draggable="false">
+
+        <button class="mp-hotspot" data-zone="1" style="left:67%;top:24%"
+          data-bx="70%" data-by="18%"
+          data-label="Zona Hotelera" data-title="Hotel Boutique"
+          data-desc="Hospedaje integrado a la hacienda heritage. Operación activa con flujo diario que ingresa al pool desde el primer huésped.">
+          <div class="mp-hotspot-ring"></div><div class="mp-hotspot-dot"></div>
+          <span class="mp-hotspot-num">1</span>
+        </button>
+
+        <button class="mp-hotspot" data-zone="2" style="left:44%;top:48%"
+          data-bx="44%" data-by="46%"
+          data-label="Corazón del Proyecto" data-title="Plaza Principal"
+          data-desc="El epicentro del Pueblo Mágico. Flujo turístico constante 365 días — el mercado cautivo que llena los locales sin inversión en marketing.">
+          <div class="mp-hotspot-ring"></div><div class="mp-hotspot-dot"></div>
+          <span class="mp-hotspot-num">2</span>
+        </button>
+
+        <button class="mp-hotspot" data-zone="3" style="left:24%;top:63%"
+          data-bx="20%" data-by="61%"
+          data-label="Entretenimiento" data-title="Teatro & Auditorio"
+          data-desc="Eventos privados, bodas, congresos y espectáculos. Renta por evento de alto valor unitario que se suma al flujo mensual del pool.">
+          <div class="mp-hotspot-ring"></div><div class="mp-hotspot-dot"></div>
+          <span class="mp-hotspot-num">3</span>
+        </button>
+
+        <button class="mp-hotspot" data-zone="4" style="left:72%;top:60%"
+          data-bx="74%" data-by="58%"
+          data-label="Gastronomía" data-title="Corredor Gastronómico"
+          data-desc="Locales ancla con renta fija más porcentaje de ventas. El tránsito turístico garantiza aforo constante para los operadores.">
+          <div class="mp-hotspot-ring"></div><div class="mp-hotspot-dot"></div>
+          <span class="mp-hotspot-num">4</span>
+        </button>
+
+        <button class="mp-hotspot" data-zone="5" style="left:50%;top:34%"
+          data-bx="50%" data-by="32%"
+          data-label="Bienestar" data-title="Spa & Jardines"
+          data-desc="Terrazas y áreas de wellness premium. Alto margen operativo con demanda sostenida del turismo de bienestar.">
+          <div class="mp-hotspot-ring"></div><div class="mp-hotspot-dot"></div>
+          <span class="mp-hotspot-num">5</span>
+        </button>
+
+        <button class="mp-hotspot" data-zone="6" style="left:61%;top:82%"
+          data-bx="62%" data-by="80%"
+          data-label="Flujo Independiente" data-title="Estacionamiento"
+          data-desc="270 cajones de ingreso autónomo los 365 días. El único activo del pool que genera renta sin depender de ningún locatario.">
+          <div class="mp-hotspot-ring"></div><div class="mp-hotspot-dot"></div>
+          <span class="mp-hotspot-num">6</span>
+        </button>
+      </div>
+
+      <!-- Panel de detalle (desktop) -->
+      <div class="mp-panel-outer" id="mpPanelOuter">
+        <div class="mp-panel" id="mpPanel">
+          <button class="mp-panel-close" id="mpPanelClose">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          <div class="mp-panel-crop" id="mpPanelCrop"></div>
+          <div class="mp-panel-body">
+            <div class="mp-panel-zone" id="mpPanelZone"></div>
+            <div class="mp-panel-title" id="mpPanelTitle"></div>
+            <div class="mp-panel-desc" id="mpPanelDesc"></div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Controls -->
-    <div class="mp-controls">
-      <button class="mp-btn" id="mpZoomIn" title="Acercar">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      </button>
-      <button class="mp-btn" id="mpZoomOut" title="Alejar">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      </button>
-      <button class="mp-btn" id="mpReset" title="Restablecer vista">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-      </button>
-    </div>
+    <p class="mp-tap-hint" id="mpTapHint">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Toca cualquier punto dorado para ver esa zona
+    </p>
+  </div>
 
-    <!-- Hint -->
-    <div class="mp-hint" id="mpHint">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>
-      Arrastra para navegar
+  <!-- Panel móvil (bottom sheet) -->
+  <div class="mp-panel-sheet" id="mpPanelSheet">
+    <div class="mp-panel" id="mpPanelMobile">
+      <button class="mp-panel-close" id="mpPanelCloseSheet">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="mp-panel-crop" id="mpPanelCropMobile"></div>
+      <div class="mp-panel-body">
+        <div class="mp-panel-zone" id="mpPanelZoneMobile"></div>
+        <div class="mp-panel-title" id="mpPanelTitleMobile"></div>
+        <div class="mp-panel-desc" id="mpPanelDescMobile"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1279,8 +1361,7 @@
     </div>
 
     <div class="flujo-bottom">
-      <div class="flujo-bottom-t">Administración profesional · Costo Admin 12% · Inflación 5% anual</div>
-      <div class="flujo-bottom-s">El fondo distribuye utilidades al pool de inversionistas proporcionalmente a su participación fiduciaria.</div>
+      <div class="flujo-bottom-s">El fideicomiso distribuye utilidades al pool de inversionistas proporcionalmente a su participación.</div>
     </div>
   </div>
 </section>
@@ -1458,151 +1539,61 @@
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
-/* ═══════════════ MASTERPLAN VIEWER ═══════════════ */
+/* ═══════════════ MASTERPLAN GALLERY ═══════════════ */
 (function(){
-  const stage = document.getElementById('mpStage');
-  const canvas = document.getElementById('mpCanvas');
-  const img = document.getElementById('mpImg');
-  const hint = document.getElementById('mpHint');
-  if(!stage||!canvas||!img) return;
+  const outer     = document.getElementById('mpPanelOuter');
+  const crop      = document.getElementById('mpPanelCrop');
+  const zone      = document.getElementById('mpPanelZone');
+  const title     = document.getElementById('mpPanelTitle');
+  const desc      = document.getElementById('mpPanelDesc');
+  const closeBtn  = document.getElementById('mpPanelClose');
+  const sheet     = document.getElementById('mpPanelSheet');
+  const cropM     = document.getElementById('mpPanelCropMobile');
+  const zoneM     = document.getElementById('mpPanelZoneMobile');
+  const titleM    = document.getElementById('mpPanelTitleMobile');
+  const descM     = document.getElementById('mpPanelDescMobile');
+  const closeM    = document.getElementById('mpPanelCloseSheet');
+  const hint      = document.getElementById('mpTapHint');
+  if(!outer) return;
 
-  let scale = 1, minScale = 0.5, maxScale = 5;
-  let tx = 0, ty = 0;
-  let dragging = false, startX = 0, startY = 0, originTx = 0, originTy = 0;
-  let hintTimer;
+  let active = null;
+  const isMobile = () => window.innerWidth <= 680;
 
-  function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
-
-  function stageSize(){return{w:stage.clientWidth,h:stage.clientHeight}}
-
-  function imgSize(){return{w:img.naturalWidth||img.clientWidth,h:img.naturalHeight||img.clientHeight}}
-
-  function getScaledBounds(){
-    const ss = stageSize();
-    const is = imgSize();
-    const sw = is.w * scale, sh = is.h * scale;
-    const maxTx = Math.max(0,(sw - ss.w)/2);
-    const maxTy = Math.max(0,(sh - ss.h)/2);
-    return{maxTx,maxTy,sw,sh};
-  }
-
-  function applyTransform(transition){
-    const b = getScaledBounds();
-    tx = clamp(tx, -b.maxTx, b.maxTx);
-    ty = clamp(ty, -b.maxTy, b.maxTy);
-    canvas.classList.toggle('no-transition', !transition);
-    canvas.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(${scale})`;
-    canvas.style.left = '50%';
-    canvas.style.top = '50%';
-    canvas.style.position = 'absolute';
-  }
-
-  // Init: set canvas to absolute within stage
-  canvas.style.position = 'absolute';
-  canvas.style.left = '50%';
-  canvas.style.top = '50%';
-  canvas.style.transform = 'translate(-50%,-50%) scale(1)';
-  stage.style.position = 'relative';
-
-  function resetView(animate){
-    scale = 1; tx = 0; ty = 0;
-    applyTransform(animate);
-  }
-
-  // Wheel zoom
-  stage.addEventListener('wheel', e => {
-    e.preventDefault();
-    const rect = stage.getBoundingClientRect();
-    const cx = e.clientX - rect.left - stage.clientWidth/2;
-    const cy = e.clientY - rect.top  - stage.clientHeight/2;
-    const delta = e.deltaY > 0 ? 0.88 : 1.12;
-    const newScale = clamp(scale * delta, minScale, maxScale);
-    const ratio = newScale / scale;
-    tx = cx + (tx - cx) * ratio;
-    ty = cy + (ty - cy) * ratio;
-    scale = newScale;
-    applyTransform(false);
-    hideHint();
-  },{passive:false});
-
-  // Mouse drag
-  stage.addEventListener('mousedown', e => {
-    dragging = true;
-    startX = e.clientX; startY = e.clientY;
-    originTx = tx; originTy = ty;
-    stage.classList.add('dragging');
-    hideHint();
-  });
-  window.addEventListener('mousemove', e => {
-    if(!dragging) return;
-    tx = originTx + (e.clientX - startX);
-    ty = originTy + (e.clientY - startY);
-    applyTransform(false);
-  });
-  window.addEventListener('mouseup', ()=>{dragging=false;stage.classList.remove('dragging')});
-
-  // Touch pinch + drag
-  let lastDist = 0, lastMidX = 0, lastMidY = 0, touchDragging = false;
-  let touchStartTx = 0, touchStartTy = 0, touchStartX = 0, touchStartY = 0;
-
-  stage.addEventListener('touchstart', e => {
-    e.preventDefault();
-    hideHint();
-    if(e.touches.length === 1){
-      touchDragging = true;
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-      touchStartTx = tx; touchStartTy = ty;
-    } else if(e.touches.length === 2){
-      touchDragging = false;
-      const dx = e.touches[0].clientX - e.touches[1].clientX;
-      const dy = e.touches[0].clientY - e.touches[1].clientY;
-      lastDist = Math.hypot(dx,dy);
-      const rect = stage.getBoundingClientRect();
-      lastMidX = (e.touches[0].clientX + e.touches[1].clientX)/2 - rect.left - stage.clientWidth/2;
-      lastMidY = (e.touches[0].clientY + e.touches[1].clientY)/2 - rect.top  - stage.clientHeight/2;
+  function openZone(btn) {
+    if (active) active.classList.remove('active');
+    active = btn;
+    btn.classList.add('active');
+    const bx = btn.dataset.bx, by = btn.dataset.by;
+    const d = btn.dataset;
+    if (hint) hint.classList.add('gone');
+    if (isMobile()) {
+      cropM.style.backgroundPosition = `${bx} ${by}`;
+      zoneM.textContent = d.label;
+      titleM.textContent = d.title;
+      descM.textContent = d.desc;
+      sheet.classList.add('active');
+    } else {
+      crop.style.backgroundPosition = `${bx} ${by}`;
+      zone.textContent = d.label;
+      title.textContent = d.title;
+      desc.textContent = d.desc;
+      outer.classList.add('active');
     }
-  },{passive:false});
-
-  stage.addEventListener('touchmove', e => {
-    e.preventDefault();
-    if(e.touches.length === 1 && touchDragging){
-      tx = touchStartTx + (e.touches[0].clientX - touchStartX);
-      ty = touchStartTy + (e.touches[0].clientY - touchStartY);
-      applyTransform(false);
-    } else if(e.touches.length === 2){
-      const dx = e.touches[0].clientX - e.touches[1].clientX;
-      const dy = e.touches[0].clientY - e.touches[1].clientY;
-      const dist = Math.hypot(dx,dy);
-      const ratio = dist / lastDist;
-      const newScale = clamp(scale * ratio, minScale, maxScale);
-      const r2 = newScale / scale;
-      tx = lastMidX + (tx - lastMidX) * r2;
-      ty = lastMidY + (ty - lastMidY) * r2;
-      scale = newScale;
-      lastDist = dist;
-      applyTransform(false);
-    }
-  },{passive:false});
-
-  stage.addEventListener('touchend', ()=>{touchDragging=false});
-
-  // Buttons
-  document.getElementById('mpZoomIn').addEventListener('click',()=>{
-    scale = clamp(scale*1.3, minScale, maxScale);
-    applyTransform(true);
-  });
-  document.getElementById('mpZoomOut').addEventListener('click',()=>{
-    scale = clamp(scale/1.3, minScale, maxScale);
-    applyTransform(true);
-  });
-  document.getElementById('mpReset').addEventListener('click',()=>resetView(true));
-
-  function hideHint(){
-    clearTimeout(hintTimer);
-    hint.classList.add('hidden');
   }
-  hintTimer = setTimeout(hideHint, 3500);
+
+  function closeAll() {
+    outer.classList.remove('active');
+    sheet.classList.remove('active');
+    if (active) { active.classList.remove('active'); active = null; }
+  }
+
+  document.querySelectorAll('.mp-hotspot').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.contains('active') ? closeAll() : openZone(btn);
+    });
+  });
+
+  [closeBtn, closeM].forEach(b => b && b.addEventListener('click', closeAll));
 })();
 
 /* ── Parallax hero ── */
