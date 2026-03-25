@@ -122,7 +122,9 @@
 
     .hero-stats{position:absolute;bottom:3.5rem;right:0;display:flex;gap:1px}
     .hero-stat{background:rgba(60,18,8,.72);backdrop-filter:blur(12px);border:1px solid var(--choc-border);padding:1.1rem 1.5rem;text-align:center}
-    .hero-stat-value{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:600;color:var(--gold-light);display:block}
+    .hero-stat-value{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:600;color:var(--gold-light);display:block;min-width:5ch;transition:color .3s}
+    .hero-stat-value.slot-text{font-family:'Courier New',monospace;font-size:1.1rem;letter-spacing:.06em;color:var(--on-dark-dim)}
+    .hero-stat-value.slot-text.locked{font-family:'Playfair Display',serif;font-size:1.1rem;letter-spacing:.04em;color:var(--gold-light)}
     .hero-stat-label{font-size:.56rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-dim);display:block;margin-top:.25rem}
 
     .scroll-ind{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;z-index:3}
@@ -726,10 +728,10 @@
   </div>
 
   <div class="hero-stats container">
-    <div class="hero-stat"><span class="hero-stat-value" data-count="9000">0</span><span class="hero-stat-label">M² Rentables</span></div>
-    <div class="hero-stat"><span class="hero-stat-value" data-count="411">0</span><span class="hero-stat-label">Tickets Totales</span></div>
-    <div class="hero-stat"><span class="hero-stat-value">+112.8%</span><span class="hero-stat-label">Plusvalía Capital Tierra</span></div>
-    <div class="hero-stat"><span class="hero-stat-value">10 años</span><span class="hero-stat-label">Proyección Operativa</span></div>
+    <div class="hero-stat"><span class="hero-stat-value" data-slot-num="9000" data-suffix=" M²">—</span><span class="hero-stat-label">M² Rentables</span></div>
+    <div class="hero-stat"><span class="hero-stat-value" data-slot-float="112.8" data-prefix="+" data-suffix="%">—</span><span class="hero-stat-label">Plusvalía Capital Tierra</span></div>
+    <div class="hero-stat"><span class="hero-stat-value" data-slot-num="10" data-suffix=" años">—</span><span class="hero-stat-label">Proyección Operativa</span></div>
+    <div class="hero-stat"><span class="hero-stat-value slot-text" data-slot-text="patrimonial">———————————</span><span class="hero-stat-label">Tipo de Garantía</span></div>
   </div>
 
   <div class="scroll-ind">
@@ -1607,19 +1609,70 @@ gsap.registerPlugin(ScrollTrigger);
 gsap.to('#heroBg',{yPercent:18,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:true}});
 
 /* ── Counter animado (hero stats) ── */
-function animateCount(el){
-  const target=+el.dataset.count;
-  let start=0;
-  const step=()=>{
-    start+=Math.ceil(target/60);
-    if(start>=target){el.textContent=target.toLocaleString('es-MX');return}
-    el.textContent=start.toLocaleString('es-MX');
-    requestAnimationFrame(step);
+/* ── Slot machine: números ── */
+function slotNum(el, target, isFloat) {
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const fmt = v => isFloat ? v.toFixed(1) : Math.floor(v).toLocaleString('es-MX');
+  const randNum = () => {
+    const r = isFloat
+      ? (Math.random() * target * 1.8 + target * 0.2)
+      : Math.floor(Math.random() * target * 1.5 + 100);
+    return fmt(r);
   };
-  requestAnimationFrame(step);
+  let frame = 0;
+  const slotFrames = 24;
+  const slotId = setInterval(() => {
+    frame++;
+    el.textContent = prefix + randNum() + suffix;
+    if (frame >= slotFrames) {
+      clearInterval(slotId);
+      // count up to real value
+      let val = 0;
+      const steps = 36;
+      const inc = target / steps;
+      const countId = setInterval(() => {
+        val += inc;
+        if (val >= target) {
+          el.textContent = prefix + fmt(target) + suffix;
+          clearInterval(countId);
+        } else {
+          el.textContent = prefix + fmt(val) + suffix;
+        }
+      }, 18);
+    }
+  }, 38);
 }
+
+/* ── Slot machine: texto ── */
+function slotText(el, finalText) {
+  const chars = 'abcdefghijklmnoprstuvwxyz';
+  const len = finalText.length;
+  let frame = 0;
+  const preFrames = 22;
+  const framesPerLock = 5;
+  const id = setInterval(() => {
+    frame++;
+    let out = '';
+    for (let i = 0; i < len; i++) {
+      const lockAt = preFrames + i * framesPerLock;
+      out += frame >= lockAt
+        ? finalText[i]
+        : chars[Math.floor(Math.random() * chars.length)];
+    }
+    el.textContent = out;
+    if (frame >= preFrames + (len - 1) * framesPerLock + 2) {
+      el.textContent = finalText;
+      el.classList.add('locked');
+      clearInterval(id);
+    }
+  }, 48);
+}
+
 ScrollTrigger.create({trigger:'#hero',start:'top 80%',onEnter:()=>{
-  document.querySelectorAll('[data-count]').forEach(el=>animateCount(el));
+  document.querySelectorAll('[data-slot-num]').forEach(el => slotNum(el, +el.dataset.slotNum, false));
+  document.querySelectorAll('[data-slot-float]').forEach(el => slotNum(el, +el.dataset.slotFloat, true));
+  document.querySelectorAll('[data-slot-text]').forEach(el => slotText(el, el.dataset.slotText));
 }});
 
 /* ── Ventajas cards ── */
