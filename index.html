@@ -449,6 +449,22 @@
       transition: opacity .5s, transform .5s;
     }
     .ventaja-card:hover { background: rgba(82,26,12,.9); }
+    .ventaja-card.brand-cell {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; text-align: center; gap: .9rem;
+      background: rgba(24,8,2,.6);
+    }
+    .ventaja-card.brand-cell:hover { background: rgba(24,8,2,.85); }
+    .ventaja-brand-logo { width: 68px; height: auto; opacity: .88; }
+    .ventaja-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; color: var(--gold-pale);
+      letter-spacing: .03em; line-height: 1.25;
+    }
+    .ventaja-brand-sub {
+      font-size: .53rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold); font-weight: 600; margin-top: .2rem;
+    }
     .ventaja-icon {
       font-size: 1.4rem; margin-bottom: 1rem; display: block;
     }
@@ -499,6 +515,24 @@
       font-size: 1.08rem; font-style: italic;
       color: var(--ink-mid); line-height: 1.65;
     }
+
+    /* Imagen Valquírico */
+    .valq-img-wrap {
+      position: relative; width: 100%; height: 230px;
+      overflow: hidden; border-radius: 4px;
+      clip-path: polygon(0 0, 100% 0, 100% 86%, 0 100%);
+      flex-shrink: 0; margin-bottom: -.5rem;
+    }
+    .valq-img-wrap::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 45%, rgba(252,246,232,.35) 100%);
+    }
+    .valq-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      object-position: center 35%;
+      transform: scale(1.05); transition: transform 7s ease;
+    }
+    .valq-img-wrap:hover img { transform: scale(1.1); }
 
     /* Panel derecho Valquírico */
     .valq-right { display: flex; flex-direction: column; gap: 1rem; }
@@ -872,6 +906,13 @@
           <div class="ventaja-title">Skin in the Game</div>
           <p class="ventaja-desc">El equipo promotor <strong>también invierte en el proyecto</strong>. No es un modelo de comisiones puras — hay alineación total de intereses entre promotores e inversionistas.</p>
         </div>
+        <div class="ventaja-card brand-cell">
+          <img src="L&L.png" class="ventaja-brand-logo" alt="El Salitre">
+          <div>
+            <div class="ventaja-brand-name">El Salitre</div>
+            <div class="ventaja-brand-sub">Pueblo Mágico · Querétaro</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -896,6 +937,9 @@
           </blockquote>
         </div>
         <div class="valq-right">
+          <div class="valq-img-wrap">
+            <img src="ValQuirico-768x510.jpg" alt="Valquírico Querétaro" loading="lazy">
+          </div>
           <div class="valq-vs-card">
             <div class="valq-vs-header">
               <span class="valq-vs-name rival">Valquírico (residencial)</span>
